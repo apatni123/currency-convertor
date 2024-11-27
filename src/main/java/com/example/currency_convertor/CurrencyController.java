@@ -31,7 +31,7 @@ public class CurrencyController {
 
         String source = currencyForm.getSource().toUpperCase();
         String target = currencyForm.getTarget().toUpperCase();
-        double amount = currencyForm.getAmount();
+        Double amount = currencyForm.getAmount();
 
         // Validate the source and target currencies
         if (!currencyService.isValidCurrency(source) && !source.isBlank()) {
@@ -53,16 +53,21 @@ public class CurrencyController {
         try {
             double rate = currencyService.getExchangeRate(source, target);
             double convertedAmount = amount * rate;
-
+        
+            
             BigDecimal roundedAmount = BigDecimal.valueOf(convertedAmount)
-                                      .setScale(2, RoundingMode.HALF_UP);
-convertedAmount = roundedAmount.doubleValue();
-
-            model.addAttribute("convertedAmount", convertedAmount);
+                                                  .setScale(2, RoundingMode.HALF_UP);
+            convertedAmount = roundedAmount.doubleValue();
+        
+            
+            String formattedAmount = String.format("%.2f", convertedAmount);
+            
+            model.addAttribute("convertedAmount", formattedAmount);
         } catch (Exception e) {
             model.addAttribute("error", "There was an error converting the currency.");
             return "currency_form";
         }
+        
 
         return "currency_form";
     }

@@ -12,7 +12,7 @@ public class CurrencyForm {
     private String target;
 
     @Positive(message = "Amount must be greater than zero")
-    private double amount;
+    private Double amount;
 
     // Getters and Setters
     public String getSource() {
@@ -31,11 +31,11 @@ public class CurrencyForm {
         this.target = target;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 }
