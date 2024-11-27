@@ -1,0 +1,131 @@
+/* Basic Reset and Global Styles */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #EDEEE9;
+  color: #303030;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: clamp(1rem, 6vw, 10rem);
+  margin-bottom: 2rem;
+}
+
+/* Floating Label Form Styling */
+.form {
+  width: 100%;
+  max-width: 400px;
+  background-color: #D8DBCE;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.form__group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form__input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #303030;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: transparent;
+  outline: none;
+  transition: all 250ms;
+}
+
+.form__input:focus {
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
+.form__input:focus + .form__label,
+.form__input:not(:placeholder-shown) + .form__label {
+  transform: translateY(-2.0rem) scale(0.8);
+  color: #303030;
+}
+
+.form__label {
+  position: absolute;
+  top: 1rem;
+  left: 1.25rem;
+  font-size: 1rem;
+  color: #909090;
+  transition: all 250ms;
+  pointer-events: none;
+}
+
+.form__input::placeholder {
+  color: transparent;
+}
+
+button {
+  background-color: #303030;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 200ms;
+  display:block;
+  margin: 0 auto;
+
+}
+
+button:hover {
+  background-color: #505050;
+}
+
+.convertedAmount-container {
+    margin-top: 2rem; 
+    width: 100%; 
+    max-width: 400px; 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+}
+
+.convertedAmount-container h2,
+.convertedAmount-container p {
+    font-size: 1.5rem; /* Uniform font size */
+    margin: 0; 
+}
+
+.convertedAmount-container p span {
+    margin-left: 0.5rem; /* Adds spacing between the amount and source code */
+    font-weight: bold; /* Optional: Make the currency code bold */
+}
+
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+
+  
+  
+
+/* Style for error messages */
+.error-message {
+    color: red;
+    font-size: 0.875rem; /* Slightly smaller than regular text */
+    margin-top: 0.25rem; /* Spacing above the error message */
+    display: block; /* Ensure the error message is on a new line */
+  }
+
+
+  

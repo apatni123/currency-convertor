@@ -1,5 +1,8 @@
 package com.example.currency_convertor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,13 +35,13 @@ public class CurrencyController {
 
         // Validate the source and target currencies
         if (!currencyService.isValidCurrency(source) && !source.isBlank()) {
-            bindingResult.rejectValue("source", "currency.invalid", "Invalid source currency code.");
+            bindingResult.rejectValue("source", "currency.invalid", "This is not a valid code. Please try again!");
         }
         if (!currencyService.isValidCurrency(target)) {
-            bindingResult.rejectValue("target", "currency.invalid", "Invalid target currency code.");
+            bindingResult.rejectValue("target", "currency.invalid", "This is not a valid code. Please try again!");
         }
         if (source.equalsIgnoreCase(target)) {
-            bindingResult.rejectValue("target","currency.invalid", "Source code and target code cannot be the same");
+            bindingResult.rejectValue("target","currency.invalid", "Source code and Target code cannot be the same");
         }
 
         // If validation errors exist, return to the form page
@@ -50,6 +53,11 @@ public class CurrencyController {
         try {
             double rate = currencyService.getExchangeRate(source, target);
             double convertedAmount = amount * rate;
+
+            BigDecimal roundedAmount = BigDecimal.valueOf(convertedAmount)
+                                      .setScale(2, RoundingMode.HALF_UP);
+convertedAmount = roundedAmount.doubleValue();
+
             model.addAttribute("convertedAmount", convertedAmount);
         } catch (Exception e) {
             model.addAttribute("error", "There was an error converting the currency.");

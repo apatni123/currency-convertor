@@ -2,37 +2,43 @@
 <html xmlns="http://www.thymeleaf.org">
 <head>
     <title>Currency Convertor</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
 </head>
 <body>
     <h1>Currency Convertor</h1>
 
-    <form th:action="@{/convert}" method="get" th:object="${currencyForm}">
-        <div>
-            <label for="source">Source Currency:</label>
-            <input type="text" id="source" name="source" th:value="${currencyForm.source}" required>
-            <span th:if="${#fields.hasErrors('source')}" th:errors="*{source}"></span>
-        </div><br>
+    <form th:action="@{/convert}" method="get" th:object="${currencyForm}" class="form">
+        <!-- Source Currency -->
+        <div class="form__group">
+            <input type="text" id="source" name="source" th:value="${currencyForm.source}" class="form__input" placeholder="Source Currency" required>
+            <label for="source" class="form__label">Source Currency:</label>
+            <span class="error-message" th:if="${#fields.hasErrors('source')}" th:errors="*{source}"></span>
+        </div>
 
-        <div>
-            <label for="target">Target Currency:</label>
-            <input type="text" id="target" name="target" th:value="${currencyForm.target}" required>
-            <span th:if="${#fields.hasErrors('target')}" th:errors="*{target}"></span>
-        </div><br>
+        <!-- Target Currency -->
+        <div class="form__group">
+            <input type="text" id="target" name="target" th:value="${currencyForm.target}" class="form__input" placeholder="Target Currency" required>
+            <label for="target" class="form__label">Target Currency:</label>
+            <span class="error-message" th:if="${#fields.hasErrors('target')}" th:errors="*{target}"></span>
+        </div>
 
-        <div>
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" th:value="${currencyForm.amount}" step="0.01" required >
-            <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
-        </div><br>
-
-        <button type="submit">Convert</button>
+        <!-- Amount -->
+        <div class="form__group">
+            <input type="number" id="amount" name="amount" th:value="${currencyForm.amount}" class="form__input" step="0.01" placeholder="Amount" required>
+            <label for="amount" class="form__label">Amount:</label>
+            <span class="error-message" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+        </div>
+        
+            <button type="submit">Convert</button>
+        
     </form>
 
-
-
-    <div>
+    <div class="convertedAmount-container">
         <h2>Converted Amount:</h2>
-        <p th:text="${convertedAmount}"></p>
+        <p>
+            <span th:text="${convertedAmount}"></span>
+            <span th:text="${currencyForm.target}" class="uppercase"></span>
+        </p>
     </div>
 </body>
 </html>
