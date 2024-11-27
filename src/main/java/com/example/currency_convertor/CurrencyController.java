@@ -1,48 +1,61 @@
 package com.example.currency_convertor;
 
-//Imports all the spring annotation and classes
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-
-
-//This indicates this class handles HTTP requests and sends back the response
-//Also sends the response as a JSON object
+import jakarta.validation.Valid;
 
 @Controller
 public class CurrencyController {
 
-
-    //Finds a matching bean and injects it into class 
-    //Finds the CurrencyService bean which is a spring-managed bean without created a new object
     @Autowired
     private CurrencyService currencyService;
 
     @GetMapping("/")
-    public String showForm() {
-        //Basically says return the currency form which is in the template. This is called a view
+    public String showForm(Model model) {
+        model.addAttribute("currencyForm", new CurrencyForm());
         return "currency_form";
     }
+    
+    
 
-    //This specifies that this method handles HTTP get requests mad to the /convert URL
     @GetMapping("/convert")
+    public String convert(@ModelAttribute("currencyForm") @Valid CurrencyForm currencyForm, BindingResult bindingResult, Model model) {
 
-    //@RequestParams binds the query parameters from the get request to the method parameteers
-    public String convert(@RequestParam String source, @RequestParam String target, @RequestParam double amount, Model model){
+        String source = currencyForm.getSource().toUpperCase();
+        String target = currencyForm.getTarget().toUpperCase();
+        double amount = currencyForm.getAmount();
 
-        source = source.toUpperCase();
-        target = target.toUpperCase();
+        // Validate the source and target currencies
+        if (!currencyService.isValidCurrency(source) && !source.isBlank()) {
+            bindingResult.rejectValue("source", "currency.invalid", "Invalid source currency code.");
+        }
+        if (!currencyService.isValidCurrency(target)) {
+            bindingResult.rejectValue("target", "currency.invalid", "Invalid target currency code.");
+        }
+        if (source.equalsIgnoreCase(target)) {
+            bindingResult.rejectValue("target","currency.invalid", "Source code and target code cannot be the same");
+        }
 
-        
-        //then its basically calling the get exchange rate method from currency sercue
-        double rate = currencyService.getExchangeRate(source, target);
-        double convertedAmount =  amount * rate;
+        // If validation errors exist, return to the form page
+        if (bindingResult.hasErrors()) {
+            return "currency_form";
+        }
 
-        //Passed to the view
-        model.addAttribute("convertedAmount", convertedAmount);
-        return ("currency_form");
+        // Proceed with conversion if both currencies are valid
+        try {
+            double rate = currencyService.getExchangeRate(source, target);
+            double convertedAmount = amount * rate;
+            model.addAttribute("convertedAmount", convertedAmount);
+        } catch (Exception e) {
+            model.addAttribute("error", "There was an error converting the currency.");
+            return "currency_form";
+        }
+
+        return "currency_form";
     }
 }

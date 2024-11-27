@@ -6,18 +6,29 @@
 <body>
     <h1>Currency Convertor</h1>
 
-    <form action="/convert" method="get">
-        <label for="source">Source Currency:</label>
-        <input type="text" id="source" name="source" required><br><br>
+    <form th:action="@{/convert}" method="get" th:object="${currencyForm}">
+        <div>
+            <label for="source">Source Currency:</label>
+            <input type="text" id="source" name="source" th:value="${currencyForm.source}" required>
+            <span th:if="${#fields.hasErrors('source')}" th:errors="*{source}"></span>
+        </div><br>
 
-        <label for="target">Target Currency:</label>
-        <input type="text" id="target" name="target" required><br><br>
+        <div>
+            <label for="target">Target Currency:</label>
+            <input type="text" id="target" name="target" th:value="${currencyForm.target}" required>
+            <span th:if="${#fields.hasErrors('target')}" th:errors="*{target}"></span>
+        </div><br>
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" required>
+        <div>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" th:value="${currencyForm.amount}" step="0.01" required >
+            <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+        </div><br>
 
         <button type="submit">Convert</button>
     </form>
+
+
 
     <div>
         <h2>Converted Amount:</h2>
